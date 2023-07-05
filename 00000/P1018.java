@@ -4,6 +4,23 @@ import java.util.Arrays;
 
 public class P1018 {
     static char[][] matrix;
+    static char[][] correctMatrix1 =   {"BWBWBWBW".toCharArray(),
+                                        "WBWBWBWB".toCharArray(),
+                                        "BWBWBWBW".toCharArray(),
+                                        "WBWBWBWB".toCharArray(),
+                                        "BWBWBWBW".toCharArray(),
+                                        "WBWBWBWB".toCharArray(),
+                                        "BWBWBWBW".toCharArray(),
+                                        "WBWBWBWB".toCharArray()};
+    static char[][] correctMatrix2 =   {"WBWBWBWB".toCharArray(),
+                                        "BWBWBWBW".toCharArray(),
+                                        "WBWBWBWB".toCharArray(),
+                                        "BWBWBWBW".toCharArray(),
+                                        "WBWBWBWB".toCharArray(),
+                                        "BWBWBWBW".toCharArray(),
+                                        "WBWBWBWB".toCharArray(),
+                                        "BWBWBWBW".toCharArray()};
+
     static int N;
     static int M;
     public static void main(String[] args) throws Exception {
@@ -28,18 +45,20 @@ public class P1018 {
     }
 
     public static int getFillCount(int x, int y){
-        int count = 0;
-        char comp = matrix[x][y];
+        int count1 = 0;
+        int count2 = 0;
         for (int i = x; i < x + 8; i++) {
-            for (int j = y + 1; j < y + 8; j++) {
-                if (matrix[i][j] == comp){
-                    count++;
+            for (int j = y; j < y + 8; j++) {
+                if (matrix[i][j] != correctMatrix1[i-x][j-y]){
+                    count1++;
                 }
-                if (comp == 'W') comp = 'B';
-                else comp = 'W';
+                if (matrix[i][j] != correctMatrix2[i-x][j-y]){
+                    count2++;
+                }
             }
         }
-        System.out.println("x: " + x + ", y: " + y + ", count: " + count);
-        return count;
+        if (count1 < count2)
+            return count1;
+        return count2;
     }
 }
