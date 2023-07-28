@@ -7,8 +7,8 @@ public class test {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Random r = new Random();
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
-             sb.append(r.nextInt(100)).append(" ");
+        for (int i = 0; i < 1000000; i++) {
+             sb.append("test").append(r.nextInt(100000)).append(" enter \n");
         }
         System.out.println(sb);
     }

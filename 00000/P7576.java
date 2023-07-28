@@ -1,45 +1,47 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class P7576 {
     static int M;
     static int N;
+    static boolean change;
+    static Map<Integer, List<Integer>> checkList = new HashMap<>();
+    static int[][] matrix;
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] MN = br.readLine().split(" ");
-        M = Integer.parseInt(MN[0]);
-        N = Integer.parseInt(MN[1]);
-        int[][] matrix = new int[N][M];
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        M = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        matrix = new int[N][M];
         for (int i = 0; i < N; i++) {
-            matrix[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+            st = new StringTokenizer(br.readLine(), " ");
+            int j = 0;
+            List<Integer> list = new ArrayList<>();
+            while (st.hasMoreTokens()) {
+                int num = Integer.parseInt(st.nextToken());
+                if (num == 1) list.add(j);
+                matrix[i][j++] = num;
+            }
+            checkList.put(i, list);
         }
         int day = 0;
         while (true) {
-            int[][] after = new int[N][M];
-            deepCopy(matrix, after);
-            boolean change = false;
-            for (int i = 0; i < matrix.length; i++) {
-                for (int j = 0; j < matrix[0].length; j++) {
-                    if (matrix[i][j] == 1) {
-                        if (isValidPos(i-1, j, matrix, after)) {
-                            change = true;
-                        }
-                        if (isValidPos(i, j-1, matrix, after)) {
-                            change = true;
-                        }
-                        if (isValidPos(i, j+1, matrix, after)) {
-                            change = true;
-                        }
-                        if (isValidPos(i+1, j, matrix, after)) {
-                            change = true;
-                        }
-                    }
+            change = false;
+            Map<Integer, List<Integer>> mapCopy = checkList.entrySet().stream()
+                    .collect(Collectors.toMap(Map.Entry::getKey, e -> List.copyOf(e.getValue())));
+            for (Map.Entry<Integer, List<Integer>> e : mapCopy.entrySet()) {
+                int x = e.getKey();
+                for (int y : e.getValue()) {
+                    isValidPos(x - 1, y);
+                    isValidPos(x, y - 1);
+                    isValidPos(x, y + 1);
+                    isValidPos(x + 1, y);
                 }
             }
             if (change) {
                 day++;
-                deepCopy(after, matrix);
             }
             else break;
         }
@@ -58,16 +60,13 @@ public class P7576 {
         else System.out.println(-1);
     }
 
-    public static boolean isValidPos(int x, int y, int[][] matrix, int[][] after) {
+    public static void isValidPos(int x, int y) {
         if (x >= 0 && x < N && y >= 0 && y < M && matrix[x][y] == 0) {
-            after[x][y] = 1;
-            return true;
-        } else return false;
-    }
-
-    public static void deepCopy(int[][] a, int[][] b) {
-        for (int i = 0; i < a.length; i++) {
-            System.arraycopy(a[i], 0, b[i], 0, a[0].length);
+            matrix[x][y] = 1;
+            List<Integer> list = checkList.get(x);
+            list.add(y);
+            checkList.put(x, list);
+            change = true;
         }
     }
 }

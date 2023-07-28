@@ -9,7 +9,6 @@ public class P10815 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
         int[] cards = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-        long beforeTime = System.currentTimeMillis();
         Map<Integer, Integer> map = new HashMap<>();
         for (int i : cards) {
             map.put(i, 1);
@@ -22,8 +21,5 @@ public class P10815 {
             else sb.append("0 ");
         }
         System.out.println(sb);
-        long afterTime = System.currentTimeMillis();
-        long secDiffTime = (afterTime - beforeTime); //두 시간에 차 계산
-        System.out.println("시간차이(ms) : " + secDiffTime);
     }
 }
