@@ -12,6 +12,7 @@ public class P18111 {
         int[][] matrix = new int[N][M];
         int min = 256;
         int max = 0;
+        // 입력
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine(), " ");
             for (int j = 0; j < M; j++) {
@@ -24,6 +25,8 @@ public class P18111 {
 
         int minTime = Integer.MAX_VALUE;
         int minHeight = 0;
+        // 이미 땅 고르기가 완료된 경우
+        if (min == max) minTime = 0;
         for (int height = min; height <= max; height++) {
             int time = 0;
             int tempB = B;
