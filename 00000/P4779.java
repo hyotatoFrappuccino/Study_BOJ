@@ -7,7 +7,9 @@ public class P4779 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String input;
         StringBuilder sb = new StringBuilder();
+        // 인텔리제이용
         while ((input = br.readLine()) != null){
+            // 백준 제출용
 //        while ((input = br.readLine()) != null & !input.isEmpty()){
             int N = Integer.parseInt(input);
             sb2 = new StringBuilder();

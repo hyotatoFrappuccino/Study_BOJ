@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class P3733 {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String input = "";
+        String input;
         while ((input = br.readLine()) != null && !input.isEmpty()){
             int[] NS = Arrays.stream(input.split(" ")).mapToInt(Integer::parseInt).toArray();
             int N = NS[0];
