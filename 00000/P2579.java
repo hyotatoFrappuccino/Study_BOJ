@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 
 public class P2579 {
     public static void main(String[] args) throws Exception {
+        //noinspection DuplicatedCode
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
         int[] list = new int[N+1];

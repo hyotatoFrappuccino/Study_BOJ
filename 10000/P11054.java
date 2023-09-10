@@ -8,6 +8,7 @@ public class P11054 {
         int N = Integer.parseInt(br.readLine());
         int[] list = new int[N];
         int[] dp = new int[N];
+        //noinspection DuplicatedCode
         int[] dp2 = new int[N];
         StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
