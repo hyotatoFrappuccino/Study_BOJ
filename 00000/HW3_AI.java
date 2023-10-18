@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class P0_AI {
+public class HW3_AI {
     static char[][] matrix;
     static boolean[][] visited;
     static int n, m;
