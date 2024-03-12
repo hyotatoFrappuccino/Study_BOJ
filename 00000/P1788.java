@@ -7,14 +7,14 @@ public class P1788 {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        if (N < 0) {
+        if (N < 0 && N % 2 == 0) {
             System.out.println("-1");
-            N = -N;
         } else if (N == 0) {
             System.out.println("0");
         } else {
             System.out.println("1");
         }
+        N = Math.abs(N);
         long[] fibo = new long[N + 2];
         fibo[0] = 0;
         fibo[1] = 1;
