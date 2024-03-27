@@ -10,13 +10,13 @@ public class P10830 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
-        BigInteger B = new BigInteger(st.nextToken());
-        BigInteger[][] matrix = new BigInteger[N][N];
-        BigInteger[][] newMatrix = new BigInteger[N][N];
+        long B = Long.parseLong(st.nextToken());
+        long[][] matrix = new long[N][N];
+        long[][] newMatrix = new long[N][N];
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < N; j++) {
-                BigInteger num = new BigInteger(String.valueOf(Integer.parseInt(st.nextToken())));
+                long num = Long.parseLong(st.nextToken());
                 matrix[i][j] = num;
                 newMatrix[i][j] = num;
             }
@@ -24,28 +24,45 @@ public class P10830 {
 
         // 연산
 
-        for (BigInteger b = BigInteger.ZERO; b.compareTo(B) < 0; b = b.add(BigInteger.ONE)) {
+        for (int b = 1; b < B; b++) {
+            long[][] newMatrixCopy = deepCopy(newMatrix, N);
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < N; j++) {
                     // i 행, j줄을 모두 곱해 [i,j]에 새로 할당
-                    BigInteger sum = BigInteger.ZERO;
+                    long sum = 0;
                     for (int k = 0; k < N; k++) {
-                        sum = sum.add(matrix[i][k].multiply(newMatrix[k][j]));
+                        sum += matrix[i][k] * newMatrixCopy[k][j];
                     }
-                    newMatrix[i][j] = sum;
+                    newMatrix[i][j] = sum % 1000;
                 }
             }
         }
+        extracted(N, newMatrix);
 
         // 결과 출력
+
+    }
+
+    private static void extracted(int N, long[][] newMatrix) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 sb.append(newMatrix[i][j]).append(" ");
-//                sb.append(newMatrix[i][j].divide(new BigInteger("1000"))).append(" ");
             }
             sb.append("\n");
         }
         System.out.println(sb);
+    }
+
+    public static long[][] deepCopy(long[][] original, int n) {
+        if (original == null) {
+            return null;
+        }
+
+        long[][] result = new long[n][n];
+        for (int i = 0; i < original.length; i++) {
+            System.arraycopy(original[i], 0, result[i], 0, original[i].length);
+        }
+        return result;
     }
 }
