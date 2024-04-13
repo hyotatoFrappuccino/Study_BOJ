@@ -1,20 +1,29 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
 
 public class P17425 {
     public static void main(String[] args) throws Exception {
-        long start = System.currentTimeMillis();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        long[] list = new long[1_000_000 + 1];
-        for (int i = 1; i <= 1_000_000; i++) {
-            long sum = 0;
-            for (int j = 1; j <= i; j++) {
-                sum += (long) (i / j) * j;
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        long[] dp = new long[1_000_000+1];
+        Arrays.fill(dp, 1);
+        for (int i = 2; i < dp.length; i++) {
+            dp[i] += dp[i - 1];
+            for (int j = 1; i * j < dp.length; j++) {
+                dp[i * j] += i;
             }
-            list[i] = sum;
         }
+
+        int testcase = Integer.parseInt(br.readLine());
+        for (int t = 0; t < testcase; t++) {
+            int N = Integer.parseInt(br.readLine());
+            bw.write(dp[N] + "\n");
+        }
+        bw.flush();
+        bw.close();
         br.close();
-        long end = System.currentTimeMillis();
-        System.out.println(end - start);
     }
 }
