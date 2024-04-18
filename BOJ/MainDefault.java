@@ -1,35 +1,32 @@
-package BOJ;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainDefault {
-	private static String[] readLines() throws IOException {
-    	//System.in을 통해 데이터를 입력받고 String[]으로 전달하는 메서드
-        int LEN = 2;
+    static String process(String[] lines){
+        StringBuilder result = new StringBuilder();
+
+
+
+        return result.toString();
+    }
+    public static void main(String[] args) throws IOException {
+        System.out.println(process(readLines()));
+    }
+
+    private static String[] readLines() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] lines = new String[LEN];
-        for (int i = 0; i < LEN; i++) {
-            lines[i] = br.readLine();
+        List<String> lines = new ArrayList<>();
+        String line;
+        while ((line = br.readLine()) != null) {
+            lines.add(line);
         }
-
         br.close();
-        return lines;
-    }
-    
-    static void input(String[] lines){
-    	//입력받은 데이터들로 문제 풀 준비를 하는 메서드
 
-    }
-    
-    static String process(){
-    	//문제 풀이 과정이 담긴 메서드
-        return "Test";
-    }
-    
-	public static void main(String[] args) throws IOException {
-    	input(readLines());
-        System.out.println(process());
+        String[] linesArray = new String[lines.size()];
+        linesArray = lines.toArray(linesArray);
+        return linesArray;
     }
 }
