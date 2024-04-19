@@ -57,6 +57,7 @@ public class TestTest {
 
     @org.junit.Test
     public void test() throws IOException {
-        assertEquals(readResult(fileName), Main.process(readLines(fileName)));
+        Main.input(readLines(fileName));
+        assertEquals(readResult(fileName).trim(), Main.process().trim());
     }
 }

@@ -9,9 +9,8 @@ import java.io.IOException;
 
 
 public class GetTestcase {
+    static final String problemNum = "14501";
     public static void main(String[] args) throws Exception {
-
-        final String problemNum = "1759";
         String URL = "https://www.acmicpc.net/problem/" + problemNum;
         String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36";
 

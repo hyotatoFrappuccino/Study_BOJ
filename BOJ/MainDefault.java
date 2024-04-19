@@ -5,22 +5,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainDefault {
-    static String process(String[] lines){
-        StringBuilder result = new StringBuilder();
+    static StringBuilder output;
 
+    static void input(String[] lines) {
 
-
-        return result.toString();
+        output = new StringBuilder();
     }
+
+    static String process() {
+
+
+        return output.toString();
+    }
+
     public static void main(String[] args) throws IOException {
-        System.out.println(process(readLines()));
+        input(readLines());
+        System.out.println(process());
     }
 
     private static String[] readLines() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         List<String> lines = new ArrayList<>();
         String line;
-        while ((line = br.readLine()) != null) {
+        while ((line = br.readLine()) != null && !line.isEmpty()) {
             lines.add(line);
         }
         br.close();
