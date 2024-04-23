@@ -45,14 +45,16 @@ public class P1107 {
         min = Math.min(min, Math.abs(100 - N));
         bw.append(String.valueOf(min));
 
-
-
-
         // output
         bw.flush();
 
         br.close();
         bw.close();
+    }
+
+    public static void remocon(int maxDepth, List<Integer> possibleButton) {
+        int[] channel = new int[maxDepth];
+        dfs(channel, 0, maxDepth, possibleButton);
     }
 
     public static void dfs(int[] channel, int depth, int maxDepth, List<Integer> possibleButton) {
@@ -72,8 +74,4 @@ public class P1107 {
         }
     }
 
-    public static void remocon(int maxDepth, List<Integer> possibleButton) {
-        int[] channel = new int[maxDepth];
-        dfs(channel, 0, maxDepth, possibleButton);
-    }
 }
