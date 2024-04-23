@@ -3,28 +3,33 @@ import java.util.*;
 
 public class P15655 {
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static int N;
+    static int M;
+    static boolean[] visited;
+    static int[] result;
+    static int[] array;
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        List<Integer> list = new ArrayList<>();
-        int[] array = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-        for (int i : array) {
-            list.add(i);
-        }
-        list.sort(Comparator.naturalOrder());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        visited = new boolean[N];
+        result = new int[M];
 
-        NM7(new int[M], list, 0, M);
+        array = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        Arrays.sort(array);
+        dfs(0, 0);
+
 
         bw.flush();
         bw.close();
         br.close();
     }
 
-    public static void NM7(int[] result, List<Integer> list, int depth, int maxDepth) throws IOException {
-        if (depth == maxDepth) {
+    public static void dfs(int index, int depth) throws IOException {
+        if (depth == M) {
             StringBuilder sb = new StringBuilder();
             for (int i : result) {
                 sb.append(i).append(" ");
@@ -32,13 +37,14 @@ public class P15655 {
             bw.append(sb).append("\n");
             return;
         }
-        for (Integer num : list) {
-            if (depth > 0 && result[depth-1] > num) continue;
-            result[depth] = num;
-            List<Integer> list2 = new ArrayList<>(list);
-            list2.remove(num);
-            NM7(result, list2, depth + 1, maxDepth);
-        }
 
+        for (int i = index; i < N; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                result[depth] = array[i];
+                dfs(i + 1, depth + 1);
+                visited[i] = false;
+            }
+        }
     }
 }
