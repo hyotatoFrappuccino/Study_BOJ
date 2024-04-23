@@ -53,7 +53,6 @@ public class P3085 {
 
     /**
      * 값 교환
-     *
      * @param i  첫번째 값의 row
      * @param j  첫번재 값의 col
      * @param ii 두번째 값의 row
@@ -67,7 +66,6 @@ public class P3085 {
 
     /**
      * 먹을 수 있는 사탕의 최대 개수 반환
-     *
      * @return 먹을 수 있는 사탕의 최대 개수
      */
     private static int getMaxCandy() {
