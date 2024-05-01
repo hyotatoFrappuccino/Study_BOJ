@@ -22,6 +22,7 @@ public class GetTestcase {
         if (!directory.exists()) {
             directory.mkdirs(); // 디렉토리가 존재하지 않으면 생성합니다.
         }
+        deleteFiles(directory);
 
         int fileIndex = 1;
         String inFile = "", outFile = "";
@@ -57,6 +58,21 @@ public class GetTestcase {
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void deleteFiles(File directory) {
+        if (directory.exists() && directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        deleteFiles(file);
+                    } else {
+                        file.delete();
+                    }
+                }
+            }
         }
     }
 }
