@@ -6,7 +6,6 @@ import java.util.*;
 
 public class P13549 {
     static int[] time = new int[100000 + 1];
-    static int[] parent = new int[100000 + 1];
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -61,9 +60,5 @@ public class P13549 {
             }
 
         }
-    }
-
-    private static int[] getNextPos(int n) {
-        return new int[]{n + 1, n - 1, n * 2};
     }
 }
