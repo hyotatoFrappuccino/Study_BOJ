@@ -1,12 +1,14 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class Main {
+public class P15685 {
     static int N;
     static List<DragonCurve> list;
-    static StringBuilder output;
+    static int result;
     static int[][] directions = {{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
 
 
@@ -15,10 +17,10 @@ public class Main {
         list = new ArrayList<>();
         for (int i = 1; i <= N; i++) {
             int[] input = Arrays.stream(lines[i].split(" ")).mapToInt(Integer::parseInt).toArray();
-            DragonCurve dragonCurve = new DragonCurve(new Point(input[0], input[1], input[2]), input[3]);
+            DragonCurve dragonCurve = new DragonCurve(new Point(input[1], input[0], input[2]), input[3]);
             list.add(dragonCurve);
         }
-        output = new StringBuilder();
+        result = 0;
     }
 
     static String process() {
@@ -40,6 +42,8 @@ public class Main {
                 dragonCurve.setEndX(x);
                 dragonCurve.setEndY(y);
             }
+            Point lastP = new Point(dragonCurve.getEndX(), dragonCurve.getEndY(), 0);
+            dragonCurve.addCurve(lastP);
         }
         boolean[][] matrix = new boolean[101][101];
 
@@ -51,25 +55,22 @@ public class Main {
             }
         }
 
-        for (int i = 0; i < 101; i++) {
-            for (int j = 0; j < 101; j++) {
-                if (matrix[i][j]) {
-                    System.out.print("O ");
-                } else {
-                    System.out.print("X ");
+        for (int i = 0; i < matrix.length - 1; i++) {
+            for (int j = 0; j < matrix.length - 1; j++) {
+                if (matrix[i][j] && matrix[i][j + 1] && matrix[i + 1][j] && matrix[i + 1][j + 1]) {
+                    result++;
                 }
             }
-            System.out.println();
         }
 
-        return output.toString();
+        return String.valueOf(result);
     }
 
     static class DragonCurve {
-        private List<Point> curves;
+        private final List<Point> curves;
         private int endX;
         private int endY;
-        private int generation;
+        private final int generation;
 
         public DragonCurve(Point initPoint, int generation) {
             curves = new ArrayList<>();
@@ -78,8 +79,6 @@ public class Main {
             int[] nextPos = getNextPos(initPoint.getX(), initPoint.getY(), initPoint.getDirection());
             endX = nextPos[0];
             endY = nextPos[1];
-//            endX = initPoint.getX();
-//            endY = initPoint.getY();
         }
 
         public void addCurve(Point curve) {
@@ -120,9 +119,9 @@ public class Main {
     }
 
     static class Point {
-        private int x;
-        private int y;
-        private int direction;
+        private final int x;
+        private final int y;
+        private final int direction;
 
         public Point(int x, int y, int direction) {
             this.x = x;
