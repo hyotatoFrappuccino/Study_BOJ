@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class P16197 {
+public class Main {
     static int N;
     static int M;
     static int[][] board;
@@ -23,13 +23,17 @@ public class P16197 {
             for (int j = 0; j < M; j++) {
                 int state = -1;
                 switch (charArray[j]) {
-                    case '.' -> state = STATE.EMPTY;
-                    case 'o' -> {
+                    case '.':
+                        state = STATE.EMPTY;
+                        break;
+                    case 'o':
                         state = STATE.EMPTY;
                         coinxy.add(i);
                         coinxy.add(j);
-                    }
-                    case '#' -> state = STATE.WALL;
+                        break;
+                    case '#':
+                        state = STATE.WALL;
+                        break;
                 }
                 board[i][j] = state;
             }
@@ -43,19 +47,18 @@ public class P16197 {
 
     static int bfs(int initX1, int initY1, int initX2, int initY2) {
         Queue<Coin> queue = new LinkedList<>();
-        queue.add(new Coin(initX1, initY1, initX2, initY2, 0));
+        queue.add(new Coin(initX1, initY1, initX2, initY2));
         int[][][] visited = new int[2][N][M];
 
         while (!queue.isEmpty()) {
             Coin coin = queue.poll();
-            int x1 = coin.getX1();
-            int y1 = coin.getY1();
-            int x2 = coin.getX2();
-            int y2 = coin.getY2();
-            int depth = coin.getDepth();
+            int x1 = coin.x1();
+            int y1 = coin.y1();
+            int x2 = coin.x2();
+            int y2 = coin.y2();
 
             // 버튼을 10번보다 더 많이 누르게 될 경우 (이미 10번을 누름)
-            if (depth >= 10) {
+            if (visited[0][x1][y1] >= 10) {
                 return -1;
             }
 
@@ -70,33 +73,34 @@ public class P16197 {
                 boolean drop1 = nx1 < 0 || nx1 >= N || ny1 < 0 || ny1 >= M;
                 boolean drop2 = nx2 < 0 || nx2 >= N || ny2 < 0 || ny2 >= M;
                 if ((drop1 && !drop2) || (!drop1 && drop2)) {
-                    return depth + 1;
+                    return Math.min(visited[0][x1][y1] + 1, visited[1][x2][y2] + 1);
                 }
 
                 if (drop1 && drop2) continue;
 
                 // 벽인 경우 무시. 아니면 이동
-                if (!(board[nx1][ny1] == STATE.WALL)) {
+                if (!(board[nx1][ny1] == STATE.WALL) && visited[0][nx1][ny1] == 0) {
                     visited[0][nx1][ny1] = visited[0][x1][y1] + 1;
                 } else {
                     nx1 = x1;
                     ny1 = y1;
                 }
 
-                if (!(board[nx2][ny2] == STATE.WALL)) {
+                if (!(board[nx2][ny2] == STATE.WALL) && visited[0][nx2][ny2] == 0) {
                     visited[1][nx2][ny2] = visited[1][x2][y2] + 1;
                 } else {
                     nx2 = x2;
                     ny2 = y2;
                 }
 
-                if (nx1 != x1 || ny1 != y1 || nx2 != x2 || ny2 != y2) {
-                    queue.add(new Coin(nx1, ny1, nx2, ny2, depth + 1));
-                }
+                queue.add(new Coin(nx1, ny1, nx2, ny2));
+                System.out.println("(" + nx1 + ", " + ny1 + "), (" + nx2 + ", " + ny2 + ")");
+                System.out.println(visited[0][nx1][ny1] + ", " + visited[1][nx2][ny2]);
             }
         }
         return -1;
     }
+
 
 
     public static void main(String[] args) throws IOException {
@@ -124,38 +128,4 @@ public class P16197 {
     }
 }
 
-class Coin {
-    private final int x1;
-    private final int y1;
-    private final int x2;
-    private final int y2;
-    private final int depth;
-
-    public Coin(int x1, int y1, int x2, int y2, int depth) {
-        this.x1 = x1;
-        this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
-        this.depth = depth;
-    }
-
-    public int getX1() {
-        return x1;
-    }
-
-    public int getY1() {
-        return y1;
-    }
-
-    public int getX2() {
-        return x2;
-    }
-
-    public int getY2() {
-        return y2;
-    }
-
-    public int getDepth() {
-        return depth;
-    }
-}
+record Coin(int x1, int y1, int x2, int y2) {}
