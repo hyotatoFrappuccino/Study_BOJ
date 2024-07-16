@@ -1,0 +1,80 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class P15664 {
+    static int N;
+    static int M;
+    static List<Integer> list;
+    static List<String> result;
+    static StringBuilder output;
+
+    static void input(String[] lines) {
+        StringTokenizer st = new StringTokenizer(lines[0]);
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        list = new ArrayList<>();
+        st = new StringTokenizer(lines[1]);
+        for (int i = 0; i < N; i++) {
+            list.add(Integer.parseInt(st.nextToken()));
+        }
+        list.sort(Comparator.naturalOrder());
+        result = new ArrayList<>();
+        output = new StringBuilder();
+    }
+
+    static String process() {
+        dfs(0, new int[M], new boolean[N]);
+
+        for (String s : result) {
+            output.append(s).append("\n");
+        }
+        return output.toString();
+    }
+
+    static void dfs(int depth, int[] num, boolean[] visited) {
+        if (depth == M) {
+            StringBuilder sb = new StringBuilder();
+            for (int i : num) {
+                sb.append(i).append(" ");
+            }
+            if (!result.contains(sb.toString())) {
+                result.add(sb.toString());
+            }
+            return;
+        }
+
+        for (int i = 0; i < N; i++) {
+            if (!visited[i] && (depth > 0 && num[depth - 1] <= list.get(i)) || depth == 0) {
+                visited[i] = true;
+                num[depth] = list.get(i);
+                dfs(depth + 1, num, visited);
+                visited[i] = false;
+            }
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        input(readLines());
+        System.out.println(process());
+    }
+
+    private static String[] readLines() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        List<String> lines = new ArrayList<>();
+        String line;
+        while ((line = br.readLine()) != null && !line.isEmpty()) {
+            lines.add(line);
+        }
+        br.close();
+
+        String[] linesArray = new String[lines.size()];
+        linesArray = lines.toArray(linesArray);
+        return linesArray;
+    }
+}
