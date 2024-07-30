@@ -1,72 +1,101 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class P7576 {
     static int M;
     static int N;
-    static boolean change;
-    static Map<Integer, List<Integer>> checkList = new HashMap<>();
+    static int[] dx = {-1, 0, 1, 0};
+    static int[] dy = {0, 1, 0, -1};
     static int[][] matrix;
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+    static boolean[][] visited;
+    static boolean change;
+    static Deque<int[]> deque;
+    static Deque<int[]> tempDeque;
+    static int zeroCount;
+
+    static void input(String[] lines) {
+        StringTokenizer st = new StringTokenizer(lines[0]);
         M = Integer.parseInt(st.nextToken());
         N = Integer.parseInt(st.nextToken());
         matrix = new int[N][M];
+        visited = new boolean[N][M];
+        deque = new ArrayDeque<>();
+        zeroCount = 0;
+        tempDeque = new ArrayDeque<>();
         for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine(), " ");
-            int j = 0;
-            List<Integer> list = new ArrayList<>();
-            while (st.hasMoreTokens()) {
-                int num = Integer.parseInt(st.nextToken());
-                if (num == 1) list.add(j);
-                matrix[i][j++] = num;
+            int[] input = Arrays.stream(lines[i + 1].split(" ")).mapToInt(Integer::parseInt).toArray();
+            for (int j = 0; j < M; j++) {
+                int item = input[j];
+                matrix[i][j] = item;
+                if (item == 1) {
+                    deque.add(new int[]{i, j});
+                }
+                if (item == 0) {
+                    zeroCount++;
+                }
             }
-            checkList.put(i, list);
         }
+    }
+
+    static String process() {
         int day = 0;
         while (true) {
             change = false;
-            Map<Integer, List<Integer>> mapCopy = checkList.entrySet().stream()
-                    .collect(Collectors.toMap(Map.Entry::getKey, e -> List.copyOf(e.getValue())));
-            for (Map.Entry<Integer, List<Integer>> e : mapCopy.entrySet()) {
-                int x = e.getKey();
-                for (int y : e.getValue()) {
-                    isValidPos(x - 1, y);
-                    isValidPos(x, y - 1);
-                    isValidPos(x, y + 1);
-                    isValidPos(x + 1, y);
-                }
-            }
-            if (change) {
-                day++;
-            }
-            else break;
-        }
+            while (!deque.isEmpty()) {
+                int[] xy = deque.poll();
+                int x = xy[0];
+                int y = xy[1];
+                bfs(x, y);
 
-        boolean done = true;
-        for (int[] ints : matrix) {
-            if (done) {
-                for (int anInt : ints)
-                    if (anInt == 0) {
-                        done = false;
-                        break;
-                    }
             }
+            if (change) day++;
+            else if (day == 0) {
+                return zeroCount > 0 ? "-1" : "0";
+            }
+            else {
+//                    모두 익지 못했다면
+                if (zeroCount > 0) {
+                    return "-1";
+                }
+                return String.valueOf(day);
+            }
+            deque = tempDeque;
+            tempDeque = new ArrayDeque<>();
         }
-        if (done) System.out.println(day);
-        else System.out.println(-1);
     }
 
-    public static void isValidPos(int x, int y) {
-        if (x >= 0 && x < N && y >= 0 && y < M && matrix[x][y] == 0) {
-            matrix[x][y] = 1;
-            List<Integer> list = checkList.get(x);
-            list.add(y);
-            checkList.put(x, list);
-            change = true;
+    private static void bfs(int x, int y) {
+        for (int i = 0; i < 4; i++) {
+            int xx = x + dx[i];
+            int yy = y + dy[i];
+            if (xx >= 0 && xx < N && yy >= 0 && yy < M && matrix[xx][yy] == 0 && !visited[xx][yy])  {
+                matrix[xx][yy] = 1;
+                tempDeque.add(new int[]{xx, yy});
+                change = true;
+                visited[xx][yy] = true;
+                zeroCount--;
+            }
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        input(readLines());
+        System.out.println(process());
+    }
+
+    private static String[] readLines() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        List<String> lines = new ArrayList<>();
+        String line;
+        while ((line = br.readLine()) != null && !line.isEmpty()) {
+            lines.add(line);
+        }
+        br.close();
+
+        String[] linesArray = new String[lines.size()];
+        linesArray = lines.toArray(linesArray);
+        return linesArray;
     }
 }
