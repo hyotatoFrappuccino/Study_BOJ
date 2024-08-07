@@ -18,53 +18,23 @@ public class P2936 {
     }
 
     static String process() {
-        if (x == 0 || y == 0) {
-            for (double res_x = 0; res_x <= 250; res_x += 0.01) {
-                double res_y = 250 - res_x;
-                calc(x, y, res_x, res_y, true);
-            }
-        } else {
-            for (double res_x = 0; res_x <= 250; res_x += 0.01) {
-                double res_y = 0;
-                if (x > y) {
-                    calc(x, y, res_y, res_x, true);
-                } else {
-                    calc(y, x, res_y, res_x, false);
-                }
-            }
+        double area = 250.0 * 250.0 / 2;
+        if (x == 0 && y == 0) {
+            output.append("125.00 125.00");
+        } else if (x > 0 && y > 0) {
+            output.append(String.format(x > y ? "0.00 %.2f" : "%.2f 0.00", 250.0 - area / Math.max(x, y)));
+        } else if (x < 125 && y == 0) {
+            double t = 250.0 - area / (250.0 - x);
+            output.append(String.format("%.2f %.2f", t, 250.0 - t));
+        } else if (x == 0 && y < 125) {
+            double t = 250.0 - area / (250.0 - y);
+            output.append(String.format("%.2f %.2f", 250.0 - t, t));
+        } else if (x >= 125 && y == 0) {
+            output.append(String.format("0.00 %.2f", area / x));
+        } else if (x == 0 & y >= 125) {
+            output.append(String.format("%.2f 0.00", area / y));
         }
         return output.toString().split("\n")[0];
-    }
-
-    private static void calc(int x, int y, double res_x, double res_y, boolean format) {
-        double a = 0;
-        if (x == 0) {
-            a = 250 - y;
-        } else if (y == 0) {
-            a = 250 - x;
-        } else if (x >= y) {
-            a = 250 - res_y;
-        }
-        double b = Math.sqrt(Math.pow(res_x - x, 2) + Math.pow(res_y - y, 2));
-        double c = 0;
-        if (x == 0) {
-            c = Math.sqrt(Math.pow(res_x, 2) + Math.pow(res_y - 250, 2));
-        } else if (y == 0) {
-            c = Math.sqrt(Math.pow(res_x - 250, 2) + Math.pow(res_y, 2));
-        } else if (x >= y) {
-            c = Math.sqrt(Math.pow(x, 2) + Math.pow(y - 250, 2));
-        }
-        double p = (a + b + c) / 2;
-
-        double area = Math.sqrt(p * (p - a) * (p - b) * (p - c));
-
-        if (area >= 15625 && area < 15626) {
-            if (format) {
-                output.append(String.format("%.2f %.2f", res_x, res_y)).append("\n");
-            } else {
-                output.append(String.format("%.2f %.2f", res_y, res_x)).append("\n");
-            }
-        }
     }
 
     public static void main(String[] args) throws IOException {
