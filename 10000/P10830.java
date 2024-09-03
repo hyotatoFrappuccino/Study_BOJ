@@ -1,68 +1,99 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class P10830 {
-    // 미풀이
-    public static void main(String[] args) throws Exception {
-        // 입력
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        long B = Long.parseLong(st.nextToken());
-        long[][] matrix = new long[N][N];
-        long[][] newMatrix = new long[N][N];
+    static int N;
+    static long B;
+    static int[][] A;
+    static int[][] result;
+    static final int MOD = 1_000;
+    static StringBuilder output;
+
+    static void input(String[] lines) {
+        StringTokenizer st = new StringTokenizer(lines[0]);
+        N = Integer.parseInt(st.nextToken());
+        B = Long.parseLong(st.nextToken());
+
+        A = new int[N][N];
+        result = new int[N][N];
+
         for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
+            st = new StringTokenizer(lines[i + 1]);
             for (int j = 0; j < N; j++) {
-                long num = Long.parseLong(st.nextToken());
-                matrix[i][j] = num;
-                newMatrix[i][j] = num;
+                A[i][j] = Integer.parseInt(st.nextToken()) % MOD;
             }
         }
 
-        // 연산
+        output = new StringBuilder();
+    }
 
-        for (int b = 1; b < B; b++) {
-            long[][] newMatrixCopy = deepCopy(newMatrix, N);
-            for (int i = 0; i < N; i++) {
-                for (int j = 0; j < N; j++) {
-                    // i 행, j줄을 모두 곱해 [i,j]에 새로 할당
-                    long sum = 0;
-                    for (int k = 0; k < N; k++) {
-                        sum += matrix[i][k] * newMatrixCopy[k][j];
-                    }
-                    newMatrix[i][j] = sum % 1000;
+    static String process() {
+        result = fac(B);
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                output.append(result[i][j]);
+
+                if (j < N - 1) {
+                    output.append(" ");
                 }
             }
+            output.append("\n");
         }
-        extracted(N, newMatrix);
 
-        // 결과 출력
-
+        return output.toString();
     }
 
-    private static void extracted(int N, long[][] newMatrix) {
-        StringBuilder sb = new StringBuilder();
+    private static int[][] fac(long b) {
+        if (b == 1L) {
+            return A;
+        }
+
+        int[][] temp = fac(b / 2);
+        temp = multiply(temp, temp);
+
+        if ((b & 1) == 1) {
+            temp = multiply(temp, A);
+        }
+
+        return temp;
+    }
+
+    static int[][] multiply(int[][] A, int[][] B) {
+        int[][] result = new int[N][N];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                sb.append(newMatrix[i][j]).append(" ");
+                int sum = 0;
+                for (int k = 0; k < N; k++) {
+                    sum += A[i][k] * B[k][j];
+                }
+                result[i][j] = sum % MOD;
             }
-            sb.append("\n");
         }
-        System.out.println(sb);
+
+        return result;
     }
 
-    public static long[][] deepCopy(long[][] original, int n) {
-        if (original == null) {
-            return null;
-        }
+    public static void main(String[] args) throws IOException {
+        input(readLines());
+        System.out.println(process());
+    }
 
-        long[][] result = new long[n][n];
-        for (int i = 0; i < original.length; i++) {
-            System.arraycopy(original[i], 0, result[i], 0, original[i].length);
+    private static String[] readLines() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        List<String> lines = new ArrayList<>();
+        String line;
+        while ((line = br.readLine()) != null && !line.isEmpty()) {
+            lines.add(line);
         }
-        return result;
+        br.close();
+
+        String[] linesArray = new String[lines.size()];
+        linesArray = lines.toArray(linesArray);
+        return linesArray;
     }
 }
