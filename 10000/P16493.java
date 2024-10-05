@@ -32,6 +32,7 @@ public class P16493 {
         int[][] dp = new int[N + 1][M + 1];
         max = 0;
 
+        // i번째 책
         for (int i = 1; i <= M; i++) {
             for (int remain_days = 0; remain_days <= N; remain_days++) {
                 // i번째(i - 1) 책을 읽지 않는 경우
