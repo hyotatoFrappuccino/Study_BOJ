@@ -2,80 +2,60 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class P10830 {
+public class P2740 {
     static int N;
-    static long B;
+    static int M;
+    static int K;
     static int[][] A;
+    static int[][] B;
     static int[][] result;
-    static final int MOD = 1_000;
     static StringBuilder output;
 
     static void input(String[] lines) {
         StringTokenizer st = new StringTokenizer(lines[0]);
         N = Integer.parseInt(st.nextToken());
-        B = Long.parseLong(st.nextToken());
-
-        A = new int[N][N];
-        result = new int[N][N];
-
+        M = Integer.parseInt(st.nextToken());
+        A  = new int[N][M];
         for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(lines[i + 1]);
-            for (int j = 0; j < N; j++) {
-                A[i][j] = Integer.parseInt(st.nextToken()) % MOD;
-            }
+            A[i] = Arrays.stream(lines[1 + i].split(" ")).mapToInt(Integer::parseInt).toArray();
         }
+
+        st = new StringTokenizer(lines[1 + N]);
+        st.nextToken();
+        K = Integer.parseInt(st.nextToken());
+        B = new int[M][K];
+        for (int i = 0; i < M; i++) {
+            B[i] = Arrays.stream(lines[1 + N + 1 + i].split(" ")).mapToInt(Integer::parseInt).toArray();
+        }
+
+        result = new int[N][K];
 
         output = new StringBuilder();
     }
 
     static String process() {
-        result = fac(B);
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < K; j++) {
+                int sum = 0;
+                for (int k = 0; k < M; k++) {
+                    sum += A[i][k] * B[k][j];
+                }
+                result[i][j] = sum;
+            }
+        }
 
         for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                output.append(result[i][j]);
-
-                if (j < N - 1) {
-                    output.append(" ");
-                }
+            for (int j = 0; j < K; j++) {
+                output.append(result[i][j]).append(" ");
             }
             output.append("\n");
         }
 
         return output.toString();
-    }
-
-    private static int[][] fac(long b) {
-        if (b == 1L) {
-            return A;
-        }
-
-        int[][] temp = fac(b / 2);
-        temp = multiply(temp, temp);
-
-        if ((b & 1) == 1) {
-            temp = multiply(temp, A);
-        }
-
-        return temp;
-    }
-
-    static int[][] multiply(int[][] A, int[][] B) {
-        int[][] result = new int[N][N];
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                int sum = 0;
-                for (int k = 0; k < N; k++) {
-                    sum += A[i][k] * B[k][j];
-                }
-                result[i][j] = sum % MOD;
-            }
-        }
-
-        return result;
     }
 
     public static void main(String[] args) throws IOException {

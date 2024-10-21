@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class Test {
-    static final String problemNum = "11055";
+    static final String problemNum = "14940";
     private static final String DIRECTORY_PATH = "BOJ\\testcase";//in, out 파일이 들어있는 디렉토리 경로
     private static final int MAX_LINES = 10000; //읽을 수 있는 최대 라인 수(문제에 따라 다르게 설정합니다.)
 
@@ -38,7 +38,13 @@ public class Test {
 
         if (testcaseExists) {
             Main.input(readLines(fileName));
-            assertEquals(readResult(fileName).trim(), Main.process().trim());
+            String[] process = Main.process().split("\n");
+            StringBuilder actual = new StringBuilder();
+            for (String s : process) {
+                actual.append(s.trim()).append("\n");
+            }
+
+            assertEquals(readResult(fileName), actual.toString());
         } else {
             GetTestcase(directory);
             System.exit(0);
